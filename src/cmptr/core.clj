@@ -1,5 +1,5 @@
-(ns cmptr.core
-  (:gen-class))
+(ns cmptr.core (:require [clojure.string :as str]))
+
 
 ;;$>./computor "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"
 ;;Reduced form: 4 * X^0 + 4 * X^1 - 9.3 * X^2 = 0
@@ -19,7 +19,13 @@
 ;;Polynomial degree: 3
 ;;The polynomial degree is stricly greater than 2, I can't solve.
 
+(defn split-by-equals-sign [str] (str/split str #"="))
+
+(defn get-terms [str] (map first (re-seq #"[\+-]?\s?\d+(\.\d+)?\s\*\sX\^\d+" str)))
+
+;;(map get-terms (split-by-equals-sign "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"))
+
+
 (defn -main
-  "I don't do a whole lot ... yet."
   [& args]
-  (println "Hello, World!"))
+  (println args))
