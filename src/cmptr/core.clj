@@ -38,13 +38,13 @@
 
 (defn get-balanced-terms [str]
   (let [[left right] (str/split str #"=")]
-    (concat
-      (get-parsed-terms left)
-      (map (fn [a] (assoc a :coef (- (:coef a))))
-        (get-parsed-terms right)))))
+    (sort #(compare (:deg %2) (:deg %1))
+      (concat (get-parsed-terms left
+                                          (map (fn [a] (assoc a :coef (- (:coef a))))
+                                            (get-parsed-terms right)))))))
 
 
-(get-balanced-terms "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
+(get-balanced-terms "9.3 * X^4 - 5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
 
 
 (defn -main
