@@ -1,6 +1,5 @@
 (ns cmptr.core (:require [clojure.string :as str]))
 
-
 ;;$>./computor "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"
 ;;Reduced form: 4 * X^0 + 4 * X^1 - 9.3 * X^2 = 0
 ;;Polynomial degree: 2
@@ -21,9 +20,19 @@
 
 (defn split-by-equals-sign [str] (str/split str #"="))
 
-(defn get-terms [str] (map first (re-seq #"[\+-]?\s?\d+(\.\d+)?\s\*\sX\^\d+" str)))
+(defn get-terms [str]
+  (map first (re-seq #"[\+-]?\s?\d+(\.\d+)?\s\*\sX\^\d+" str)))
 
-;;(map get-terms (split-by-equals-sign "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"))
+
+
+
+(defn parse-term [term]
+  (let [[_ coef _ deg]
+        (re-find #"^([\+-]?\d+(\.\d+)?)\*X\^(\d+)"
+                 (str/replace term #"\s" ""))]
+    {:coef (Float/parseFloat coef) :deg (Integer/parseInt deg)}))
+
+;;(map parse-term (get-terms "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"))
 
 
 (defn -main
