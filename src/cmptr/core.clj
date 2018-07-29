@@ -54,9 +54,10 @@
 
 (defn sum-terms 
   ([] (sum-terms (->Term 0 0)))
-  ([terms] (validate-same-deg terms
-             (->Term (apply + (map get-coef terms))
-               (get-deg (first terms))))))
+  ([terms]
+   (validate-same-deg terms)
+   (->Term (apply + (map get-coef terms))
+     (get-deg (first terms)))))
 
 
 
@@ -67,7 +68,7 @@
 (defn -main
   [str]
   (let [balanced-terms (get-balanced-terms str)]
-    balanced-terms))
+    (reduce-terms balanced-terms)))
   
 
 (-main "9.3 * X^4 - 5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
