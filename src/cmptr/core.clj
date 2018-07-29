@@ -45,18 +45,22 @@
 
 
 (defn get-deg [term] (:deg term))
+
 (defn get-coef [term] (:coef term))
+
+(defn validate-same-deg [& terms]
+  (when (> (count (distinct (map get-deg terms))) 1) 
+    (throw (ex-info "Terms must be of same degree" {}))))
 
 (defn sum-terms 
   ([] (sum-terms (->Term 0 0)))
-  ([& terms] (if (> (count (distinct (map get-deg terms))) 1)
-               :error
-               (->Term (apply + (map get-coef terms))
-                       (get-deg (first terms))))))
+  ([& terms] (validate-same-deg terms)
+             (->Term (apply + (map get-coef terms))
+               (get-deg (first terms)))))
 
 
 
-(sum-terms (->Term 2 2) (->Term 2 2))
+(sum-terms (->Term 1 1) (->Term 1 1))
 
 
 (defn -main
