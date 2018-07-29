@@ -32,9 +32,12 @@
 (defn get-parsed-terms [str]
   (map parse-term (get-term-strings str)))
 
+(defn sort-terms [terms]
+  (sort #(compare (:deg %2) (:deg %1)) terms))
+
 (defn get-balanced-terms [str]
   (let [[left right] (str/split str #"=")]
-    (sort #(compare (:deg %2) (:deg %1))
+    (sort-terms
           (concat (get-parsed-terms left)
                   (map (fn [a] (assoc a :coef (- (:coef a))))
                        (get-parsed-terms right))))))
@@ -64,10 +67,12 @@
     balanced-terms))
 
 (defn get-formatted-eq [terms]
-  (reduce
-   #(str %1 (if (< (get-coef %2) 0) " - " " + ") (get-coef %2) " * X^" (get-deg %2))
-   ""
-   terms))
+  (str/replace (str (str/trim (reduce
+                                #(str %1 (if (< (get-coef %2) 0) " - " " + ") (get-coef %2) " * X^" (get-deg %2))
+                                ""
+                                terms))
+                 " = 0") #"^\+\s?" ""))
+  
 
 (get-formatted-eq (list (->Term 3 2) (->Term 0 3)))
 
