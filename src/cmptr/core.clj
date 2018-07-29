@@ -29,7 +29,7 @@
   (let [[_ coef _ deg]
         (re-find #"^([\+-]?\d+(\.\d+)?)\*X\^(\d+)"
                  (str/replace term #"\s" ""))]
-    (->Term (Integer/parseInt deg) (Float/parseFloat coef))))
+    (->Term (Float/parseFloat coef) (Integer/parseInt deg))))
 
 
 (defn get-parsed-terms [str]
@@ -54,18 +54,20 @@
 
 (defn sum-terms 
   ([] (sum-terms (->Term 0 0)))
-  ([& terms] (validate-same-deg terms)
+  ([terms] (validate-same-deg terms
              (->Term (apply + (map get-coef terms))
-               (get-deg (first terms)))))
+               (get-deg (first terms))))))
 
 
 
-(sum-terms (->Term 1 1) (->Term 1 1))
+(defn reduce-terms [terms]
+  (map sum-terms (partition-by get-deg terms)))
 
 
 (defn -main
   [str]
-  (let [balanced-terms (get-balanced-terms str)] balanced-terms))
+  (let [balanced-terms (get-balanced-terms str)]
+    balanced-terms))
   
 
 (-main "9.3 * X^4 - 5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
