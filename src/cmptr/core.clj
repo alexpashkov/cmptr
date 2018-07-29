@@ -62,16 +62,19 @@
           (map sum-terms (partition-by get-deg terms))))
 
 (defn get-formatted-eq [terms]
-  (str/replace (str (str/trim (reduce
-                               #(str
-                                 %1
-                                 (if (< (get-coef %2) 0) " - " " + ")
-                                 (str/replace (str (get-coef %2)) #"(-|\.0$)" "")
-                                 " * X^"
-                                 (get-deg %2))
-                               ""
-                               terms))
-                    " = 0") #"^\+\s?" ""))
+  (str/replace (str
+                 (str/trim
+                   (reduce
+                     #(str
+                        %1
+                        (if (< (get-coef %2) 0) " - " " + ")
+                        (str/replace (str (get-coef %2)) #"(-|\.0$)" "")
+                        " * X^"
+                        (get-deg %2))
+                     ""
+                     terms))
+                 " = 0")
+               #"^\+\s?" ""))
 
 (defn -main
   [eq]
