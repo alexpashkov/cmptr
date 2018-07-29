@@ -18,7 +18,8 @@
 ;;Polynomial degree: 3
 ;;The polynomial degree is stricly greater than 2, I can't solve.
 
-(defn split-by-equals-sign [str])
+(defrecord Term [coef deg])
+
 
 (defn get-term-strings [str]
   (map first (re-seq #"[\+-]?\s?\d+(\.\d+)?\s\*\sX\^\d+" str)))
@@ -28,25 +29,40 @@
   (let [[_ coef _ deg]
         (re-find #"^([\+-]?\d+(\.\d+)?)\*X\^(\d+)"
                  (str/replace term #"\s" ""))]
-    {:coef (Float/parseFloat coef) :deg (Integer/parseInt deg)}))
+    (->Term (Integer/parseInt deg) (Float/parseFloat coef))))
 
 
 (defn get-parsed-terms [str]
   (map parse-term (get-term-strings str)))
 
 
-
 (defn get-balanced-terms [str]
   (let [[left right] (str/split str #"=")]
     (sort #(compare (:deg %2) (:deg %1))
-      (concat (get-parsed-terms left
-                                          (map (fn [a] (assoc a :coef (- (:coef a))))
-                                            (get-parsed-terms right)))))))
+          (concat (get-parsed-terms left)
+            (map (fn [a] (assoc a :coef (- (:coef a))))
+              (get-parsed-terms right))))))
 
 
-(get-balanced-terms "9.3 * X^4 - 5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
+(defn get-deg [term] (:deg term))
+(defn get-coef [term] (:coef term))
+
+(defn sum-terms 
+  ([] (sum-terms (->Term 0 0)))
+  ([& terms] (if (> (count (distinct (map get-deg terms))) 1)
+               :error
+               (->Term (apply + (map get-coef terms))
+                       (get-deg (first terms))))))
+
+
+
+(sum-terms (->Term 2 2) (->Term 2 2))
 
 
 (defn -main
-  [& args]
-  (println args))
+  [str]
+  (let [balanced-terms (get-balanced-terms str)] balanced-terms))
+  
+
+(-main "9.3 * X^4 - 5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
+
