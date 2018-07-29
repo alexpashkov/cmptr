@@ -61,27 +61,25 @@
   (filter #(not (zero? (get-coef %)))
           (map sum-terms (partition-by get-deg terms))))
 
-(defn -main
-  [str]
-  (let [balanced-terms (get-moved-left-terms str)]
-    (get-formatted-eq balanced-terms)))
-
 (defn abs [v]
   (if (>= 0 v) v (- v)))
 
 (defn get-formatted-eq [terms]
   (str/replace (str (str/trim (reduce
                                #(str
-                                  %1
-                                  (if (< (get-coef %2) 0) " - " " + ")
-                                  (str/replace (str (get-coef %2)) #"(-|\.0$)" "")
-                                  " * X^"
-                                  (get-deg %2))
+                                 %1
+                                 (if (< (get-coef %2) 0) " - " " + ")
+                                 (str/replace (str (get-coef %2)) #"(-|\.0$)" "")
+                                 " * X^"
+                                 (get-deg %2))
                                ""
                                terms))
                     " = 0") #"^\+\s?" ""))
 
-(get-formatted-eq (list (->Term 3 2) (->Term 0 3)))
+(defn -main
+  [str]
+  (let [balanced-terms (get-moved-left-terms str)]
+    (get-formatted-eq (reduce-terms balanced-terms))))
 
 (-main "9.3 * X^4 - 5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
 
