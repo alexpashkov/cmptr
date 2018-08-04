@@ -1,4 +1,5 @@
-(ns cmptr.core (:require [clojure.string :as str]))
+(ns cmptr.core
+  (:require [clojure.string :as str]))
 
 ;;$>./computor "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"
 ;;Reduced form: 4 * X^0 + 4 * X^1 - 9.3 * X^2 = 0
@@ -38,9 +39,9 @@
 (defn get-moved-left-terms [str]
   (let [[left right] (str/split str #"=")]
     (sort-terms
-     (concat (get-parsed-terms left)
-             (map (fn [a] (assoc a :coef (- (:coef a))))
-                  (get-parsed-terms right))))))
+      (concat (get-parsed-terms left)
+              (map (fn [a] (assoc a :coef (- (:coef a))))
+                   (get-parsed-terms right))))))
 
 (defn get-deg [term] (:deg term))
 
@@ -63,28 +64,29 @@
 
 (defn get-formatted-eq [terms]
   (str/replace (str
-                (str/trim
-                 (reduce
-                  #(str
-                    %1
-                    (if (< (get-coef %2) 0) " - " " + ")
-                    (str/replace (str (get-coef %2)) #"(-|\.0$)" "")
-                    " * X^"
-                    (get-deg %2))
-                  ""
-                  terms))
-                " = 0")
+                 (str/trim
+                    (reduce
+                     #(str
+                           %1
+                           (if (< (get-coef %2) 0) " - " " + ")
+                           (str/replace (str (get-coef %2)) #"(-|\.0$)" "")
+                           " * X^"
+                           (get-deg %2))
+                     ""
+                     terms))
+                 " = 0")
                #"^\+\s?" ""))
+
+(defn solve-linear-eq [] :solve-linear-eq)
+(defn solve-quadratic-eq [] :solve-quadratic-eq)
 
 (defn -main
   [eq-str]
   (let [reduced-terms (reduce-terms (get-moved-left-terms eq-str))
         [{max-deg :deg}] reduced-terms]
-    (str "Reduced form: " (get-formatted-eq reduced-terms))
-    (str "Polynomial degree: " max-deg)
-    (if (>= max-deg 3)
-      "The polynomial degree is stricly greater than 2, I can't solve."
-      :solve)))
-
-(-main "9.3 * X^4 - 5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
-
+    (println (str "Reduced form: " (get-formatted-eq reduced-terms)))
+    (println (str "Polynomial degree: " max-deg))
+    (cond
+      (= 1 max-deg) (solve-linear-eq)
+      (= 2 max-deg) (solve-quadratic-eq)
+      :else (println "The polynomial degree is strictly greater than 2, I can't solve."))))
