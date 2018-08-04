@@ -20,6 +20,8 @@
 ;;The polynomial degree is stricly greater than 2, I can't solve.
 
 (defrecord Term [coef deg])
+(defn get-deg [^Term term] (:deg term))
+(defn get-coef [^Term term] (float (:coef term)))
 
 (defn get-term-strings [str]
   (map first (re-seq #"[\+-]?\s?\d+(\.\d+)?\s\*\sX\^\d+" str)))
@@ -33,16 +35,11 @@
 (defn get-parsed-terms [str]
   (map parse-term (get-term-strings str)))
 
-(defn get-deg [term] (:deg term))
-(defn get-coef [term] (:coef term))
-
 (defn sort-terms
   ([terms]
    (sort-terms terms >))
   ([terms direction]
    (sort (comparator #(direction (get-deg %1) (get-deg %2))) terms)))
-
-;(sort-terms (list (->Term 1 1) (->Term 2 2) (->Term 5 3)))
 
 (defn get-moved-left-terms [str]
   (let [[left right] (str/split str #"=")]
@@ -67,7 +64,10 @@
   (filter #(not (zero? (get-coef %)))
           (map sum-terms (partition-by get-deg terms))))
 
-(defn get-formatted-eq [terms]
+(defn remove-trailing-zeroes [num-str]
+  (str/replace num-str #"\.0$" ""))
+
+(defn get-formatted-eq-str [terms]
   (str/replace (str
                  (str/trim
                    (reduce
@@ -82,16 +82,19 @@
                  " = 0")
                #"^\+\s?" ""))
 
-(defn solve-linear-eq [] :solve-linear-eq)
-(defn solve-quadratic-eq [] :solve-quadratic-eq)
+(defn solve-linear-eq [reduced-terms]
+  (let [[variable-term constant-term ] (sort-terms reduced-terms)]
+    (println "The solution is:")
+    (println (remove-trailing-zeroes ( / (get-coef constant-term) (- (get-coef variable-term)))))))
 
-(defn -main
-  [eq-str]
+(defn solve-quadratic-eq [reduce-terms] :solve-quadratic-eq)
+
+(defn -main [eq-str]
   (let [reduced-terms (reduce-terms (get-moved-left-terms eq-str))
         [{max-deg :deg}] reduced-terms]
-    (println (str "Reduced form: " (get-formatted-eq reduced-terms)))
+    (println (str "Reduced form: " (get-formatted-eq-str reduced-terms)))
     (println (str "Polynomial degree: " max-deg))
     (cond
-      (= 1 max-deg) (solve-linear-eq)
-      (= 2 max-deg) (solve-quadratic-eq)
+      (= 1 max-deg) (solve-linear-eq reduced-terms)
+      (= 2 max-deg) (solve-quadratic-eq reduced-terms)
       :else (println "The polynomial degree is strictly greater than 2, I can't solve."))))
