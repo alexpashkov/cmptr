@@ -44,9 +44,9 @@
 (defn get-moved-left-terms [str]
   (let [[left right] (str/split str #"=")]
     (sort-terms
-      (concat (get-parsed-terms left)
-              (map (fn [a] (assoc a :coef (- (:coef a))))
-                   (get-parsed-terms right))))))
+     (concat (get-parsed-terms left)
+             (map (fn [a] (assoc a :coef (- (:coef a))))
+                  (get-parsed-terms right))))))
 
 (defn validate-same-deg [& terms]
   (when (> (count (distinct (map get-deg terms))) 1)
@@ -59,7 +59,6 @@
    (->Term (apply + (map get-coef terms))
            (get-deg (first terms)))))
 
-
 (defn reduce-terms [terms]
   (filter #(not (zero? (get-coef %)))
           (map sum-terms (partition-by get-deg terms))))
@@ -69,25 +68,25 @@
 
 (defn get-formatted-eq-str [terms]
   (str/replace (str
-                 (str/trim
-                   (reduce
-                     #(str
-                        %1
-                        (if (< (get-coef %2) 0) " - " " + ")
-                        (str/replace (str (get-coef %2)) #"(-|\.0$)" "")
-                        " * X^"
-                        (get-deg %2))
-                     ""
-                     (sort-terms terms <)))
-                 " = 0")
+                (str/trim
+                 (reduce
+                  #(str
+                    %1
+                    (if (< (get-coef %2) 0) " - " " + ")
+                    (str/replace (str (get-coef %2)) #"(-|\.0$)" "")
+                    " * X^"
+                    (get-deg %2))
+                  ""
+                  (sort-terms terms <)))
+                " = 0")
                #"^\+\s?" ""))
 
 (defn solve-linear-eq [reduced-terms]
   (let [[variable-term constant-term] (sort-terms reduced-terms)]
     (println "The solution is:")
     (println (remove-trailing-zeroes
-               (/ (get-coef constant-term)
-                  (- (get-coef variable-term)))))))
+              (/ (get-coef constant-term)
+                 (- (get-coef variable-term)))))))
 
 (defn solve-quadratic-eq [reduced-terms]
   (letfn [(get-discriminant [a b c] (- (* b b) (* 4 (* a c))))]
