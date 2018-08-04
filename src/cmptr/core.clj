@@ -86,8 +86,8 @@
   (let [[variable-term constant-term] (sort-terms reduced-terms)]
     (println "The solution is:")
     (println (remove-trailing-zeroes
-                 (/ (get-coef constant-term)
-                    (- (get-coef variable-term)))))))
+               (/ (get-coef constant-term)
+                  (- (get-coef variable-term)))))))
 
 (defn solve-quadratic-eq [reduced-terms]
   (letfn [(get-discriminant [a b c] (- (* b b) (* 4 (* a c))))]
