@@ -21,7 +21,7 @@
 
 (defrecord Term [coef deg])
 (defn get-deg [^Term term] (:deg term))
-(defn get-coef [^Term term] (float (:coef term)))
+(defn get-coef [^Term term] (if (nil? term) 0 (float (:coef term))))
 
 (defn get-term-strings [str]
   (map first (re-seq #"[\+-]?\s?\d+(\.\d+)?\s\*\sX\^\d+" str)))
@@ -83,20 +83,31 @@
                #"^\+\s?" ""))
 
 (defn solve-linear-eq [reduced-terms]
-  (let [[variable-term constant-term ] (sort-terms reduced-terms)]
+  (let [[variable-term constant-term] (sort-terms reduced-terms)]
     (println "The solution is:")
     (println (remove-trailing-zeroes
-               ( / (get-coef constant-term)
-                   (- (get-coef variable-term)))))))
+                 (/ (get-coef constant-term)
+                    (- (get-coef variable-term)))))))
 
-(defn solve-quadratic-eq [reduce-terms] :solve-quadratic-eq)
+(defn solve-quadratic-eq [reduced-terms]
+  (letfn [(get-discriminant [a b c] (- (* b b) (* 4 (* a c))))]
+    (let [[a b c] (map get-coef (sort-terms reduced-terms))
+          discriminant (get-discriminant a b c)]
+      (println discriminant))))
+
+(defn get-terms-max-deg [terms]
+  (let [[highest-term] (sort-terms (reduce-terms terms))]
+    (if (empty? highest-term) 0 (get-deg highest-term))))
 
 (defn -main [eq-str]
   (let [reduced-terms (reduce-terms (get-moved-left-terms eq-str))
-        [{max-deg :deg}] reduced-terms]
+        max-deg (get-terms-max-deg reduced-terms)]
     (println (str "Reduced form: " (get-formatted-eq-str reduced-terms)))
     (println (str "Polynomial degree: " max-deg))
     (cond
+      (= 0 max-deg) (do
+                      (println "The solution is:")
+                      (println "All real numbers."))
       (= 1 max-deg) (solve-linear-eq reduced-terms)
       (= 2 max-deg) (solve-quadratic-eq reduced-terms)
       :else (println "The polynomial degree is strictly greater than 2, I can't solve."))))
