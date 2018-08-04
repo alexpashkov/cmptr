@@ -33,8 +33,13 @@
 (defn get-parsed-terms [str]
   (map parse-term (get-term-strings str)))
 
+(defn get-deg [term] (:deg term))
+(defn get-coef [term] (:coef term))
+
 (defn sort-terms [terms]
-  (sort #(compare (:deg %2) (:deg %1)) terms))
+  (sort (comparator #(> (get-deg %1) (get-deg %2))) terms))
+
+(sort-terms (list (->Term 1 1) (->Term 2 2) (->Term 5 3)))
 
 (defn get-moved-left-terms [str]
   (let [[left right] (str/split str #"=")]
@@ -42,10 +47,6 @@
       (concat (get-parsed-terms left)
               (map (fn [a] (assoc a :coef (- (:coef a))))
                    (get-parsed-terms right))))))
-
-(defn get-deg [term] (:deg term))
-
-(defn get-coef [term] (:coef term))
 
 (defn validate-same-deg [& terms]
   (when (> (count (distinct (map get-deg terms))) 1)
@@ -58,6 +59,7 @@
    (->Term (apply + (map get-coef terms))
            (get-deg (first terms)))))
 
+
 (defn reduce-terms [terms]
   (filter #(not (zero? (get-coef %)))
           (map sum-terms (partition-by get-deg terms))))
@@ -65,13 +67,13 @@
 (defn get-formatted-eq [terms]
   (str/replace (str
                  (str/trim
-                    (reduce
+                   (reduce
                      #(str
-                           %1
-                           (if (< (get-coef %2) 0) " - " " + ")
-                           (str/replace (str (get-coef %2)) #"(-|\.0$)" "")
-                           " * X^"
-                           (get-deg %2))
+                        %1
+                        (if (< (get-coef %2) 0) " - " " + ")
+                        (str/replace (str (get-coef %2)) #"(-|\.0$)" "")
+                        " * X^"
+                        (get-deg %2))
                      ""
                      terms))
                  " = 0")
