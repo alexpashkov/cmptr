@@ -97,12 +97,15 @@
   (let [[a b c] (map get-coef (sort-terms reduced-terms))
         discriminant (get-discriminant a b c)]
    (cond
-    (neg? discriminant) (do
-                         (println "Discriminant is strictly negative, there are no solutions."))
-    (zero? discriminant) (do
-                          (println "Discriminant is zero, the solution is:"))
-    (pos? discriminant) (do
-                         (println "Discriminant is strictly positive, the two solutions are:"))))))
+    (neg? discriminant)
+    (do
+     (println "Discriminant is strictly negative, there are no solutions."))
+    (zero? discriminant)
+    (do
+     (println "Discriminant is zero, the solution is:"))
+    (pos? discriminant)
+    (do
+     (println "Discriminant is strictly positive, the two solutions are:"))))))
 
 (defn get-terms-max-deg [terms]
  (let [[highest-term] (sort-terms (reduce-terms terms))]
