@@ -85,7 +85,9 @@
 (defn solve-linear-eq [reduced-terms]
   (let [[variable-term constant-term ] (sort-terms reduced-terms)]
     (println "The solution is:")
-    (println (remove-trailing-zeroes ( / (get-coef constant-term) (- (get-coef variable-term)))))))
+    (println (remove-trailing-zeroes
+               ( / (get-coef constant-term)
+                   (- (get-coef variable-term)))))))
 
 (defn solve-quadratic-eq [reduce-terms] :solve-quadratic-eq)
 
