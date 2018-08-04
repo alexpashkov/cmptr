@@ -36,10 +36,13 @@
 (defn get-deg [term] (:deg term))
 (defn get-coef [term] (:coef term))
 
-(defn sort-terms [terms]
-  (sort (comparator #(> (get-deg %1) (get-deg %2))) terms))
+(defn sort-terms
+  ([terms]
+   (sort-terms terms >))
+  ([terms direction]
+   (sort (comparator #(direction (get-deg %1) (get-deg %2))) terms)))
 
-(sort-terms (list (->Term 1 1) (->Term 2 2) (->Term 5 3)))
+;(sort-terms (list (->Term 1 1) (->Term 2 2) (->Term 5 3)))
 
 (defn get-moved-left-terms [str]
   (let [[left right] (str/split str #"=")]
@@ -75,7 +78,7 @@
                         " * X^"
                         (get-deg %2))
                      ""
-                     terms))
+                     (sort-terms terms <)))
                  " = 0")
                #"^\+\s?" ""))
 
