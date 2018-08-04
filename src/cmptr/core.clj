@@ -23,6 +23,7 @@
 (defn get-deg [^Term term] (:deg term))
 (defn get-coef [^Term term] (if (nil? term) 0 (float (:coef term))))
 
+
 (defn get-term-strings [str]
  (map first (re-seq #"[\+-]?\s?\d+(\.\d+)?\s\*\sX\^\d+" str)))
 
@@ -60,8 +61,11 @@
           (get-deg (first terms)))))
 
 (defn reduce-terms [terms]
- (filter #(not (zero? (get-coef %)))
-         (map sum-terms (partition-by get-deg terms))))
+ (group-by get-deg
+           (filter
+            #(not (zero? (get-coef %)))
+            (map sum-terms (partition-by get-deg terms)))))
+
 
 (defn remove-trailing-zeroes [num-str]
  (str/replace num-str #"\.0$" ""))
@@ -92,9 +96,23 @@
             (/ (get-coef constant-term)
                (- (get-coef variable-term)))))))
 
+(def client {:name "Super Co."
+             ;;:location "Philadelphia"
+             :description "The worldwide leader in plastic tableware."})
+
+(let [{location :location :or {location 1}} client] location)
+
+
+
+(defn get-abc [terms]
+         (let [{[{a :coef}] 2 [{b :coef}] 1 [{c :coef}] 0} terms]
+          (map #(if (nil? %) 0 %) [a b c])))
+
+
 (defn solve-quadratic-eq [reduced-terms]
  (letfn [(get-discriminant [a b c] (- (* b b) (* 4 (* a c))))]
-  (let [[a b c] (map get-coef (sort-terms reduced-terms))
+
+  (let [[a b c] (get-abc reduced-terms)
         discriminant (get-discriminant a b c)]
    (cond
     (neg? discriminant)
@@ -108,8 +126,7 @@
      (println "Discriminant is strictly positive, the two solutions are:"))))))
 
 (defn get-terms-max-deg [terms]
- (let [[highest-term] (sort-terms (reduce-terms terms))]
-  (if (empty? highest-term) 0 (get-deg highest-term))))
+ (if (empty? terms) 0 (first (sort > (keys terms)))))
 
 (defn -main [eq-str]
  (let [reduced-terms (reduce-terms (get-moved-left-terms eq-str))
