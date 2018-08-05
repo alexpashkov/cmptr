@@ -1,4 +1,6 @@
-(ns cmptr.core (:require [clojure.string :as str]))
+(ns cmptr.core
+  (:require [clojure.string :as str]
+            [cmptr.math :refer  [sqrt]]))
 
 ;;$>./computor "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"
 ;;Reduced form: 4 * X^0 + 4 * X^1 - 9.3 * X^2 = 0
@@ -38,9 +40,9 @@
 (defn get-moved-left-terms [str]
   (let [[left right] (str/split str #"=")]
     (sort-terms
-     (concat (get-parsed-terms left)
-             (map (fn [a] (assoc a :coef (- (:coef a))))
-                  (get-parsed-terms right))))))
+      (concat (get-parsed-terms left)
+              (map (fn [a] (assoc a :coef (- (:coef a))))
+                   (get-parsed-terms right))))))
 
 (defn get-deg [term] (:deg term))
 
@@ -63,17 +65,17 @@
 
 (defn get-formatted-eq [terms]
   (str/replace (str
-                (str/trim
-                 (reduce
-                  #(str
-                    %1
-                    (if (< (get-coef %2) 0) " - " " + ")
-                    (str/replace (str (get-coef %2)) #"(-|\.0$)" "")
-                    " * X^"
-                    (get-deg %2))
-                  ""
-                  terms))
-                " = 0")
+                 (str/trim
+                   (reduce
+                     #(str
+                        %1
+                        (if (< (get-coef %2) 0) " - " " + ")
+                        (str/replace (str (get-coef %2)) #"(-|\.0$)" "")
+                        " * X^"
+                        (get-deg %2))
+                     ""
+                     terms))
+                 " = 0")
                #"^\+\s?" ""))
 
 (defn -main
