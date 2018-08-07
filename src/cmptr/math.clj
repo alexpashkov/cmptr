@@ -12,11 +12,11 @@
 
 (defn sqrt [x]
   (letfn [
-          (improve-guess [guess x]
-            (average guess (/ x guess)))
-
           (good-enough? [guess x]
             (< (abs (- (square guess) x)) 0.00000000001))
+
+          (improve-guess [guess x]
+            (average guess (/ x guess)))
 
           (sqrt-iter [guess x]
             (if (good-enough? guess x)
