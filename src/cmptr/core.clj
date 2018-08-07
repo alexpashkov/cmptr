@@ -1,5 +1,6 @@
 (ns cmptr.core
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [cmptr.math :as math]))
 
 ;;$>./computor "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"
 ;;Reduced form: 4 * X^0 + 4 * X^1 - 9.3 * X^2 = 0
@@ -71,6 +72,7 @@
 (defn remove-trailing-zeroes [num-str]
   (str/replace num-str #"\.0$" ""))
 
+;; TODO refactor
 (defn get-formatted-eq-str [terms]
   (str/replace (str
                 (str/trim
@@ -97,12 +99,6 @@
     (println (remove-trailing-zeroes
               (/ (get-coef constant-term)
                  (- (get-coef variable-term)))))))
-
-(def client {:name "Super Co."
-             ;;:location "Philadelphia"
-             :description "The worldwide leader in plastic tableware."})
-
-(let [{location :location :or {location 1}} client] location)
 
 (defn get-abc [terms]
   (let [{[{a :coef}] 2 [{b :coef}] 1 [{c :coef}] 0} terms]
