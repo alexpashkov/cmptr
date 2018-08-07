@@ -9,7 +9,6 @@
 (defn average [x y]
   (/ (+ x y) 2))
 
-
 (defn sqrt [x]
   (letfn [
           (good-enough? [guess x]
