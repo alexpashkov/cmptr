@@ -67,7 +67,7 @@
              (map sum-terms (partition-by get-deg terms)))))
 
 (def test-terms (->> (range 0 3)
-                    (map #(->Term (inc %) %))))
+                     (map #(->Term (inc %) %))))
 
 (defn remove-trailing-zeroes [num-str]
   (str/replace num-str #"\.0$" ""))
@@ -106,19 +106,28 @@
 
 (defn solve-quadratic-eq [reduced-terms]
   (letfn [(get-discriminant [a b c]
-            (- (* b b) (* 4 (* a c))))]
+            (- (* b b) (* 4 (* a c))))
+          (solve [a b c]
+            (map
+              #(/ (% (- b) (math/sqrt (get-discriminant a b c))) (* 2 a))
+              [+ -]))]
     (let [[a b c] (get-abc reduced-terms)
-          discriminant (get-discriminant a b c)]
+          discriminant (get-discriminant a b c)
+          solutions (if (not (neg? discriminant)) (distinct (solve a b c)) nil)]
       (cond
         (neg? discriminant)
         (do
           (println "Discriminant is strictly negative, there are no solutions."))
         (zero? discriminant)
         (do
-          (println "Discriminant is zero, the solution is:"))
+          (println "Discriminant is zero, the solution is:")
+          (println (first solutions)))
         (pos? discriminant)
         (do
-          (println "Discriminant is strictly positive, the two solutions are:"))))))
+          (println "Discriminant is strictly positive, the two solutions are:")
+          (doseq [solution solutions]
+            (println solution)))
+        ))))
 
 (defn get-terms-max-deg [terms]
   (if (empty? terms) 0 (first (sort > (keys terms)))))
