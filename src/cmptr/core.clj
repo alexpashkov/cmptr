@@ -108,9 +108,9 @@
   (letfn [(get-discriminant [a b c]
             (- (* b b) (* 4 (* a c))))
           (solve [a b c]
-            (map
-              #(/ (% (- b) (math/sqrt (get-discriminant a b c))) (* 2 a))
-              [+ -]))]
+                 (map
+                  #(/ (% (- b) (math/sqrt (get-discriminant a b c))) (* 2 a))
+                  [+ -]))]
     (let [[a b c] (get-abc reduced-terms)
           discriminant (get-discriminant a b c)
           solutions (if (not (neg? discriminant)) (distinct (solve a b c)) nil)]
@@ -126,8 +126,7 @@
         (do
           (println "Discriminant is strictly positive, the two solutions are:")
           (doseq [solution solutions]
-            (println solution)))
-        ))))
+            (println solution)))))))
 
 (defn get-terms-max-deg [terms]
   (if (empty? terms) 0 (first (sort > (keys terms)))))
