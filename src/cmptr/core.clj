@@ -89,12 +89,9 @@
                #"^\+\s?"
                ""))
 
-(defn print-solution [solution]
-  (println "The solution is:")
-  (println solution))
 
 (defn solve-linear-eq [reduced-terms]
-  (let [[variable-term constant-term] (sort-terms reduced-terms)]
+  (let [{[variable-term] 1 [constant-term] 0 } reduced-terms]
     (println "The solution is:")
     (println (remove-trailing-zeroes
               (/ (get-coef constant-term)
