@@ -90,12 +90,18 @@
                ""))
 
 
+
+(defn print-solution [str]
+  (println "The solution is:")
+  (println str))
+
+
 (defn solve-linear-eq [reduced-terms]
   (let [{[variable-term] 1 [constant-term] 0 } reduced-terms]
-    (println "The solution is:")
-    (println (remove-trailing-zeroes
-              (/ (get-coef constant-term)
-                 (- (get-coef variable-term)))))))
+    (print-solution
+      (remove-trailing-zeroes
+        (/ (get-coef constant-term)
+           (- (get-coef variable-term)))))))
 
 (defn get-abc [terms]
   (let [{[{a :coef}] 2 [{b :coef}] 1 [{c :coef}] 0} terms]
