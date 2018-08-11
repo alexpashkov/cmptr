@@ -22,7 +22,7 @@
        #(every? term-str-is-valid? (flatten (get-term-strs %)))])))
 
 (defn parse-term [term-str]
-  (let [[_ coef _ X _ _ deg] (re-matches #"^(([-+])?\d+(\.\d+)?)?(\*?X(\^(\d+))?)?$" term-str)]
+  (let [[_ coef _ _ X _ deg] (re-matches #"^(([-+])?\d+(\.\d+)?)?(\*?X(\^(\d+))?)?$" term-str)]
     (or (term-str-is-valid? term-str)
         (throw (ex-info "Term string is not valid." {})))
     {:coef (bigdec (if (nil? coef) 1 coef))
