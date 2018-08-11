@@ -3,21 +3,21 @@
             [cmptr.parsing :as parsing]
             [cmptr.math :as math]))
 
-(parsing/parse-eq "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
+;(parsing/parse-eq "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
 ;;Reduced form: 4 * X^0 + 4 * X^1 - 9.3 * X^2 = 0
 ;;Polynomial degree: 2
 ;;Discriminant is strictly positive, the two solutions are:
 ;;0.905239
 ;;-0.475131
 
-(parsing/parse-eq "5 * X^0 + 4 * X^1 = 4 * X^0")
+;(parsing/parse-eq "5 * X^0 + 4 * X^1 = 4 * X^0")
 ;;$>./computor
 ;;Reduced form: 1 * X^0 + 4 * X^1 = 0
 ;;Polynomial degree: 1
 ;;The solution is:
 ;;-0.25
 
-(parsing/parse-eq "8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0")
+;(parsing/parse-eq "8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0")
 ;;./computor "8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0"
 ;;Reduced form: 5 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 0
 ;;Polynomial degree: 3
@@ -27,7 +27,7 @@
 ;(defn get-deg [^Term term] (:deg term))
 ;(defn get-coef [^Term term] (if (nil? term) 0 (float (:coef term))))
 
-(parsing/parse-eq "5 * X^0 + 4*X^1= 999 + 150*X^2")
+;(parsing/parse-eq "5 * X^0 + 4*X^1= 999 + 150*X^2")
 
 
 ;(defn eq-str-is-valid? [eq-str]
@@ -76,9 +76,6 @@
 ;              (map (fn [a] (assoc a :coef (- (:coef a))))
 ;                   (get-parsed-terms right))))))
 ;
-;(defn validate-same-deg [& terms]
-;  (when (> (count (distinct (map get-deg terms))) 1)
-;    (throw (ex-info "Terms must be of same degree" {}))))
 ;
 ;(defn sum-terms
 ;  ([] (sum-terms (->Term 0 0)))
