@@ -1,5 +1,10 @@
 (ns cmptr.math)
 
+(defn max [& args]                                          ;; there is native implementation, but the task prohibits
+    (when-not                                               ;; use of it
+      (empty? args)
+      (reduce #(if (> %1 %2) %1 %2) args)))
+
 (defn square [x]
   (* x x))
 
