@@ -1,8 +1,9 @@
-(ns cmptr.term)
+(ns cmptr.term
+  (:require [cmptr.math :as math]))
 
 (defn create [coef deg] {:coef coef :deg deg})
 
-(def test-terms (list (create 1 2) (create 1 2) (create 1 3)))
+(def test-terms (list (create 1 2) (create 1 2) (create 1 3) (create 1 1000)))
 
 (defn get-coef [term] (get term :coef))
 
@@ -30,7 +31,7 @@
   (group-by get-deg terms))
 
 (defn get-max-deg [terms]
-  (apply max ))
+  (apply math/max (map get-deg terms)))
 
 (defn reduce-group-terms [terms]
   (reduce-kv
