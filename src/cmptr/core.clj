@@ -153,19 +153,29 @@
 ;(defn get-terms-max-deg [terms]
 ;  (if (empty? terms) 0 (first (sort > (keys terms)))))
 ;
+
+(defn print-solution [solution]
+  (println solution))
+
 (defn -main [eq-str]
-  (let [terms (try
-                (parsing/parse-eq eq-str)
+  (let [reduced-terms (try
+                (term/reduce-terms (parsing/parse-eq eq-str))
                 (catch Exception _ nil))
-        reduced-terms (term/reduce-terms terms)]
-    (if (nil? terms)
+        max-deg (term/get-max-deg reduced-terms)
+        abc (term/get-abc reduced-terms)]
+    (if (nil? reduced-terms)
       (println "Incorrect input.")
-      (let [solution (apply math/solve-eq (term/get-abc terms))]
-        (println solution)))))
+      (do
+        (println (str "Reduced form: " (term/get-formatted-eq-str reduced-terms)))
+        (println (str "Polynomial degree: " max-deg))
+        (if (#{1 2} max-deg)
+          (print-solution (apply math/solve-eq abc))
+          (println "The polynomial degree is strictly greater than 2, I can't solve."))))))
+
+(-main "5 * X^0 + 4 * X^1 - 9.3 * X^1 = 1 * X^3")
 ;(defn -main [eq-str]
 ;  (let [reduced-terms (reduce-terms (get-moved-left-terms eq-str))
 ;        max-deg (get-terms-max-deg reduced-terms)]
-;    (println (str "Reduced form: " (get-formatted-eq-str reduced-terms)))
 ;    (println (str "Polynomial degree: " max-deg))
 ;    (cond
 ;      (= 0 max-deg) (print-solution "All real numbers.")
