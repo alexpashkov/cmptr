@@ -24,6 +24,23 @@
 (defn get-deg [^Term term] (:deg term))
 (defn get-coef [^Term term] (if (nil? term) 0 (float (:coef term))))
 
+
+(defn get-term-strs [eq-str]
+  (-> eq-str
+      (str/replace #"\s" "")
+      (str/split #"[-+=]")))
+  
+
+(defn parse-term [term-str]
+  (let [[match coef _ X _ deg] (re-matches #"^(\d+(\.\d+)?)?(\*?X(\^(\d+))?)?$" term-str)]
+    (when (or (empty? term-str) (nil? match))
+      (throw (ex-info "Term doesn't conform to expected spec." {})))
+    {:coef (bigdec (if (nil? coef) 1 coef))
+     :deg (Integer/parseInt (if X (if deg deg "1") "0"))}))
+
+
+(get-term-strings "8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0")
+
 (defn get-term-strings [str]
   (map first (re-seq #"[\+-]?\s?\d+(\.\d+)?\s\*\sX\^\d+" str)))
 
