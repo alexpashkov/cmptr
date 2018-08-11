@@ -3,7 +3,7 @@
 
 (defn create [coef deg] {:coef coef :deg deg})
 
-(def test-terms (list (create 1 2) (create 1 2) (create 1 3) (create 1 1000)))
+(def test-terms (list (create 1 2) (create 5 2) (create 2 1) (create 3 0) (create 1 1000)))
 
 (defn get-coef [term] (get term :coef))
 
@@ -39,4 +39,7 @@
     {}
     (group-terms (reduce-terms terms))))
 
-(reduce-group-terms test-terms)
+(defn get-abc [terms]
+  (let [{a 2 b 1 c 0
+         :or {a 0 b 0 c 0}} (reduce-group-terms terms)]
+    [a b c]))
