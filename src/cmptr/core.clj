@@ -3,21 +3,21 @@
             [cmptr.parsing :as parsing]
             [cmptr.math :as math]))
 
-;(parsing/parse-eq-str "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
+;(parsing/parse-eq "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
 ;;Reduced form: 4 * X^0 + 4 * X^1 - 9.3 * X^2 = 0
 ;;Polynomial degree: 2
 ;;Discriminant is strictly positive, the two solutions are:
 ;;0.905239
 ;;-0.475131
 
-;(parsing/parse-eq-str "5 * X^0 + 4 * X^1 = 4 * X^0")
+;(parsing/parse-eq "5 * X^0 + 4 * X^1 = 4 * X^0")
 ;;$>./computor
 ;;Reduced form: 1 * X^0 + 4 * X^1 = 0
 ;;Polynomial degree: 1
 ;;The solution is:
 ;;-0.25
 
-;(parsing/parse-eq-str "8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0")
+;(parsing/parse-eq "8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0")
 ;;./computor "8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0"
 ;;Reduced form: 5 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 0
 ;;Polynomial degree: 3
@@ -27,9 +27,7 @@
 ;(defn get-deg [^Term term] (:deg term))
 ;(defn get-coef [^Term term] (if (nil? term) 0 (float (:coef term))))
 
-;(parsing/parse-eq-str "5 * X^0 + 4 * X^1 = 0")
-
-
+(parsing/parse-eq "5 * X^0 + 4*X^0= 999 + 150*X")
 
 
 ;(defn eq-str-is-valid? [eq-str]
@@ -39,16 +37,6 @@
 ;      false)))
 
 
-;(term-str-is-valid? "-3*X^0")
-;
-;(eq-str-is-valid? "8*X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = - 3 * X^0")
-;
-;(defn parse-term [term-str]
-;  (let [[match coef _ X _ deg] (re-matches #"^(\d+(\.\d+)?)?(\*?X(\^(\d+))?)?$" term-str)]
-;    (or (term-str-is-valid? term-str)
-;        (throw (ex-info "Term string is not valid." {})))
-;    {:coef (bigdec (if (nil? coef) 1 coef))
-;     :deg  (Integer/parseInt (if X (if deg deg "1") "0"))}))
 ;
 ;
 ;(defn parse-eq [eq-str]
