@@ -1,9 +1,10 @@
 (ns cmptr.term
-  (:require [cmptr.math :as math]))
+  (:require [clojure.string :as str]
+            [cmptr.math :as math]))
 
 (defn create [coef deg] {:coef coef :deg deg})
 
-(def test-terms (list (create 1 2) (create 5 2) (create 2 1) (create 3 0) (create 1 1000)))
+(def test-terms (list (create 1 2) (create 5 2) (create 2 1) (create 3 0) (create 1000 1)))
 
 (defn get-coef [term] (get term :coef))
 
@@ -43,3 +44,25 @@
   (let [{a 2 b 1 c 0
          :or {a 0 b 0 c 0}} (reduce-group-terms terms)]
     [a b c]))
+
+(defn sort-terms
+  ([terms]
+   (sort-terms terms >))
+  ([terms direction]
+   (sort (comparator #(direction (get-deg %1) (get-deg %2))) terms)))
+
+(defn get-formatted-eq-str [terms]
+  (str/replace (str
+                 (str/trim
+                   (reduce
+                     #(str
+                        %1
+                        (if (< (get-coef %2) 0) " - " " + ")
+                        (str/replace (str (get-coef %2)) #"(-|\.0$)" "")
+                        " * X^"
+                        (get-deg %2))
+                     ""
+                     (sort-terms terms <)))
+                 " = 0")
+               #"^\+\s?"
+               ""))

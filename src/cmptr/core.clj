@@ -1,7 +1,8 @@
 (ns cmptr.core
   (:require [clojure.string :as str]
             [cmptr.parsing :as parsing]
-            [cmptr.math :as math]))
+            [cmptr.math :as math]
+            [cmptr.term :as term]))
 
 ;(parsing/parse-eq "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
 ;;Reduced form: 4 * X^0 + 4 * X^1 - 9.3 * X^2 = 0
@@ -62,12 +63,6 @@
 ;
 ;(defn get-parsed-terms [str]
 ;  (map parse-term (get-term-strings str)))
-;
-;(defn sort-terms
-;  ([terms]
-;   (sort-terms terms >))
-;  ([terms direction]
-;   (sort (comparator #(direction (get-deg %1) (get-deg %2))) terms)))
 ;
 ;(defn get-moved-left-terms [str]
 ;  (let [[left right] (str/split str #"=")]
@@ -158,6 +153,15 @@
 ;(defn get-terms-max-deg [terms]
 ;  (if (empty? terms) 0 (first (sort > (keys terms)))))
 ;
+(defn -main [eq-str]
+  (let [terms (try
+                (parsing/parse-eq eq-str)
+                (catch Exception _ nil))
+        reduced-terms (term/reduce-terms terms)]
+    (if (nil? terms)
+      (println "Incorrect input.")
+      (let [solution (apply math/solve-eq (term/get-abc terms))]
+        (println solution)))))
 ;(defn -main [eq-str]
 ;  (let [reduced-terms (reduce-terms (get-moved-left-terms eq-str))
 ;        max-deg (get-terms-max-deg reduced-terms)]
