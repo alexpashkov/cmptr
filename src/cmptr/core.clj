@@ -2,7 +2,8 @@
   (:require [clojure.string :as str]
             [cmptr.parsing :as parsing]
             [cmptr.math :as math]
-            [cmptr.term :as term]))
+            [cmptr.term :as term]
+            [cmptr.solve :refer [solve-linear-or-quadratic-eq]]))
 
 ;(parsing/parse-eq "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
 ;;Reduced form: 4 * X^0 + 4 * X^1 - 9.3 * X^2 = 0
@@ -157,22 +158,27 @@
 (defn print-solution [solution]
   (println solution))
 
-(defn -main [eq-str]
-  (let [reduced-terms (try
-                (term/reduce-terms (parsing/parse-eq eq-str))
-                (catch Exception _ nil))
-        max-deg (term/get-max-deg reduced-terms)
-        abc (term/get-abc reduced-terms)]
-    (if (nil? reduced-terms)
-      (println "Incorrect input.")
-      (do
-        (println (str "Reduced form: " (term/get-formatted-eq-str reduced-terms)))
-        (println (str "Polynomial degree: " max-deg))
-        (if (#{1 2} max-deg)
-          (print-solution (apply math/solve-eq abc))
-          (println "The polynomial degree is strictly greater than 2, I can't solve."))))))
+(defn -main
+  ([eq-str]
+    (-main eq-str nil))
+  ([eq-str flag]
+   (let [show-steps (= flag "--show-steps")
+         reduced-terms (try
+                         (term/reduce-terms (parsing/parse-eq eq-str))
+                         (catch Exception _ nil))
+         max-deg (term/get-max-deg reduced-terms)
+         abc (term/get-abc reduced-terms)]
+     (if (nil? reduced-terms)
+       (println "Incorrect input.")
+       (do
+         (println (str "Reduced form: " (term/get-formatted-eq-str reduced-terms)))
+         (println (str "Polynomial degree: " max-deg))
+         (when show-steps (println "show steps"))
+         (if (#{1 2} max-deg)
+           (solve-linear-or-quadratic-eq abc show-steps)
+           (println "The polynomial degree is strictly greater than 2, I can't solve.")))))))
 
-(-main "5 * X^0 + 4 * X^1 - 9.3 * X^1 = 1 * X^3")
+;(-main "5 * X^0 + 4 * X^1 - 9.3 * X^1 = 1.0005 * X^2" "--show-steps")
 ;(defn -main [eq-str]
 ;  (let [reduced-terms (reduce-terms (get-moved-left-terms eq-str))
 ;        max-deg (get-terms-max-deg reduced-terms)]
