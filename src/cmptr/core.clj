@@ -1,20 +1,23 @@
 (ns cmptr.core
   (:require [clojure.string :as str]
+            [cmptr.parsing :as parsing]
             [cmptr.math :as math]))
 
-;;$>./computor "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"
+;(parsing/parse-eq-str "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
 ;;Reduced form: 4 * X^0 + 4 * X^1 - 9.3 * X^2 = 0
 ;;Polynomial degree: 2
 ;;Discriminant is strictly positive, the two solutions are:
 ;;0.905239
 ;;-0.475131
 
-;;$>./computor "5 * X^0 + 4 * X^1 = 4 * X^0"
+;(parsing/parse-eq-str "5 * X^0 + 4 * X^1 = 4 * X^0")
+;;$>./computor
 ;;Reduced form: 1 * X^0 + 4 * X^1 = 0
 ;;Polynomial degree: 1
 ;;The solution is:
 ;;-0.25
 
+;(parsing/parse-eq-str "8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0")
 ;;./computor "8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0"
 ;;Reduced form: 5 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 0
 ;;Polynomial degree: 3
@@ -23,6 +26,8 @@
 ;(defrecord Term [coef deg])
 ;(defn get-deg [^Term term] (:deg term))
 ;(defn get-coef [^Term term] (if (nil? term) 0 (float (:coef term))))
+
+;(parsing/parse-eq-str "5 * X^0 + 4 * X^1 = 0")
 
 
 
