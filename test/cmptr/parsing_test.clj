@@ -90,5 +90,4 @@
   (testing "throws Exception for invalid term strings"
     (is (thrown? Exception (parsing/parse-term "")))
     (is (thrown? Exception (parsing/parse-term "XX")))
-    (is (thrown? Exception (parsing/parse-term "+")))
-    ))
+    (is (thrown? Exception (parsing/parse-term "+")))))
