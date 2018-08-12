@@ -62,7 +62,7 @@
         )
       )
     )
-  (testing "returns flase for invalid term strings"
+  (testing "returns false for invalid term strings"
     (is (false? (parsing/term-str-is-valid? "")))
     (is (false? (parsing/term-str-is-valid? " ")))
     (is (false? (parsing/term-str-is-valid? "+")))
@@ -73,6 +73,7 @@
     (is (false? (parsing/term-str-is-valid? "8*")))
     (is (false? (parsing/term-str-is-valid? "-8*")))
     (is (false? (parsing/term-str-is-valid? "*X")))
+    (is (false? (parsing/term-str-is-valid? "X^")))
     (is (false? (parsing/term-str-is-valid? "*X^")))
     (is (false? (parsing/term-str-is-valid? "*X^2")))
     (is (false? (parsing/term-str-is-valid? "8X^")))
