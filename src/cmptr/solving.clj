@@ -1,4 +1,4 @@
-(ns cmptr.solve
+(ns cmptr.solving
   (:require [cmptr.math :as math]))
 
 (defn get-discriminant [a b c]

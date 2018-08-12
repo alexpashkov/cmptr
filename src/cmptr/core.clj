@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [cmptr.parsing :as parsing]
             [cmptr.term :as term]
-            [cmptr.solve :refer [solve-eq]]))
+            [cmptr.solving :refer [solve-eq]]))
 
 (defn remove-trailing-zeroes [num-str]
   (str/replace num-str #"\.0$" ""))
