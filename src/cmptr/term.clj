@@ -4,8 +4,6 @@
 
 (defn create [coef deg] {:coef coef :deg deg})
 
-(def test-terms (list (create 1 2) (create 5 2) (create 2 1) (create 3 0) (create 1000 1)))
-
 (defn get-coef [term] (get term :coef))
 
 (defn get-deg [term] (get term :deg))
@@ -24,9 +22,11 @@
 
 (defn reduce-terms [terms]
   (->> terms
-       (partition-by get-deg)
+       (group-by get-deg)
+       (vals)
        (map sum-terms)
-       (flatten)))
+       (flatten)
+       (filter #(not (zero? (get-coef %))))))
 
 (defn group-terms [terms]
   (group-by get-deg terms))

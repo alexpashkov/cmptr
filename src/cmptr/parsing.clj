@@ -2,16 +2,15 @@
   (:require [clojure.string :as str]
             [cmptr.term :as term]))
 
-(def term-regex #"[-+]?(((\d+(\.\d+)?)\*?(X(\^\d+)?))|((\d+(\.\d+)?))|(X(\^\d+)?))")
+(def term-regex #"^[-+]?(((\d+(\.\d+)?)\*?(X(\^\d+)?))|((\d+(\.\d+)?))|(X(\^\d+)?))$")
 
 (defn- remove-spaces [str] (str/replace str #"\s" ""))
 
-(defn- get-term-strs [eq-str]
+(defn get-term-strs [eq-str]
   (map #(str/split % #"(?=[\+\-])") (str/split (remove-spaces eq-str) #"=")))
 
-(defn- term-str-is-valid? [term-str]
-  (let [[match] (re-matches term-regex term-str)]
-    (boolean match)))
+(defn term-str-is-valid? [term-str]
+  (boolean (re-matches term-regex term-str)))
 
 (defn- eq-str-is-valid? [eq-str]
   (let [eq-str-without-spaces (remove-spaces eq-str)]
@@ -22,10 +21,10 @@
        #(every? term-str-is-valid? (flatten (get-term-strs %)))])))
 
 (defn parse-term [term-str]
-  (let [[_ coef _ _ X _ deg] (re-matches #"^(([-+])?\d+(\.\d+)?)?(\*?X(\^(\d+))?)?$" term-str)]
+  (let [[_ sign coef _ X _ deg] (re-matches #"^([-+])?(\d+(\.\d+)?)?(\*?X(\^(\d+))?)?$" term-str)]
     (or (term-str-is-valid? term-str)
         (throw (ex-info "Term string is not valid." {})))
-    {:coef (float (Float/parseFloat (if (nil? coef) 1 coef)))
+    {:coef (double ((load-string (or sign "+")) (Double/parseDouble (if (nil? coef) "1" coef))))
      :deg  (Integer/parseInt (if X (if deg deg "1") "0"))}))
 
 (defn parse-eq [eq-str]
