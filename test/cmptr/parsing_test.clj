@@ -10,8 +10,6 @@
 (def test-eq-str4 "5 + 4 * X + X^2= X^2")
 (def test-eq-str5 "--5 + 4.665 * X + X^2 += X^2")
 
-(parsing/get-term-strs well-formatted-eq-str1)
-
 (deftest get-term-strs
   (testing "returns correct term strings on well formatted equations"
     (is (= (parsing/get-term-strs well-formatted-eq-str1) '(["5*X^0" "+4*X^1" "-9.3*X^2"] ["1*X^0"])))
@@ -79,5 +77,25 @@
     (is (false? (parsing/term-str-is-valid? "8X^")))
     (is (false? (parsing/term-str-is-valid? "8X^")))
     (is (false? (parsing/term-str-is-valid? "^2")))
+    )
+  )
+
+(deftest parse-term
+  (testing "returns terms maps for valid term strings"
+    (is (= (parsing/parse-term "8*X^0") {:coef 8.0 :deg 0}))
+    (is (= (parsing/parse-term "8*X^1") {:coef 8.0 :deg 1}))
+    (is (= (parsing/parse-term "8.5*X^1") {:coef 8.5 :deg 1}))
+    (is (= (parsing/parse-term "8") {:coef 8.0 :deg 0}))
+    (is (= (parsing/parse-term "8*X") {:coef 8.0 :deg 1}))
+    (is (= (parsing/parse-term "X") {:coef 1.0 :deg 1}))
+    (is (= (parsing/parse-term "X^0") {:coef 1.0 :deg 0}))
+    (is (= (parsing/parse-term "X^3") {:coef 1.0 :deg 3}))
+    (is (= (parsing/parse-term "0*X^3") {:coef 0.0 :deg 3}))
+    (is (= (parsing/parse-term "3*X^3") {:coef 3.0 :deg 3}))
+    (is (= (parsing/parse-term "0X^3") {:coef 0.0 :deg 3}))
+    (is (= (parsing/parse-term "3X^3") {:coef 3.0 :deg 3}))
+    )
+  (testing "returns nil for invalid term strings"
+
     )
   )
