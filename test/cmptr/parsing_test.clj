@@ -87,6 +87,8 @@
     (is (= (parsing/parse-term "3*X^3") {:coef 3.0 :deg 3}))
     (is (= (parsing/parse-term "0X^3") {:coef 0.0 :deg 3}))
     (is (= (parsing/parse-term "3X^3") {:coef 3.0 :deg 3})))
-  (testing
-
-   "returns nil for invalid term strings"))
+  (testing "throws Exception for invalid term strings"
+    (is (thrown? Exception (parsing/parse-term "")))
+    (is (thrown? Exception (parsing/parse-term "XX")))
+    (is (thrown? Exception (parsing/parse-term "+")))
+    ))
