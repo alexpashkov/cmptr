@@ -32,7 +32,7 @@
   (group-by get-deg terms))
 
 (defn get-max-deg [terms]
-  (apply math/max (map get-deg terms)))
+  (apply math/mx (map get-deg terms)))
 
 (defn reduce-group-terms [terms]
   (reduce-kv

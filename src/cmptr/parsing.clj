@@ -25,7 +25,7 @@
   (let [[_ coef _ _ X _ deg] (re-matches #"^(([-+])?\d+(\.\d+)?)?(\*?X(\^(\d+))?)?$" term-str)]
     (or (term-str-is-valid? term-str)
         (throw (ex-info "Term string is not valid." {})))
-    {:coef (bigdec (if (nil? coef) 1 coef))
+    {:coef (float (Float/parseFloat (if (nil? coef) 1 coef)))
      :deg  (Integer/parseInt (if X (if deg deg "1") "0"))}))
 
 (defn parse-eq [eq-str]
