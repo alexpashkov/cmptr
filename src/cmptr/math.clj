@@ -24,5 +24,3 @@
                        guess
                        (recur (improve-guess guess x) x)))]
     (if (zero? x) 0 (double (sqrt-iter 1 x)))))
-
-(defn solve-eq [a b c] [a b c])
