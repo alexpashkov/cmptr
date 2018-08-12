@@ -36,9 +36,9 @@
 
 (defn reduce-group-terms [terms]
   (reduce-kv
-    (fn [acc k v] (assoc acc k (get-coef (sum-terms v))))
-    {}
-    (group-terms (reduce-terms terms))))
+   (fn [acc k v] (assoc acc k (get-coef (sum-terms v))))
+   {}
+   (group-terms (reduce-terms terms))))
 
 (defn get-abc [terms]
   (let [{a 2 b 1 c 0
@@ -53,16 +53,16 @@
 
 (defn get-formatted-eq-str [terms]
   (str/replace (str
-                 (str/trim
-                   (reduce
-                     #(str
-                        %1
-                        (if (< (get-coef %2) 0) " - " " + ")
-                        (str/replace (str (get-coef %2)) #"(-|\.0$)" "")
-                        " * X^"
-                        (get-deg %2))
-                     ""
-                     (sort-terms terms <)))
-                 " = 0")
+                (str/trim
+                 (reduce
+                  #(str
+                    %1
+                    (if (< (get-coef %2) 0) " - " " + ")
+                    (str/replace (str (get-coef %2)) #"(-|\.0$)" "")
+                    " * X^"
+                    (get-deg %2))
+                  ""
+                  (sort-terms terms <)))
+                " = 0")
                #"^\+\s?"
                ""))

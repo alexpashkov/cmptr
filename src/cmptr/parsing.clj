@@ -15,10 +15,10 @@
 (defn- eq-str-is-valid? [eq-str]
   (let [eq-str-without-spaces (remove-spaces eq-str)]
     (every?
-      (fn [validator] (apply validator [eq-str-without-spaces]))
-      [#(not (empty? %))
-       #(= (count (str/split % #"=")) 2)
-       #(every? term-str-is-valid? (flatten (get-term-strs %)))])))
+     (fn [validator] (apply validator [eq-str-without-spaces]))
+     [#(not (empty? %))
+      #(= (count (str/split % #"=")) 2)
+      #(every? term-str-is-valid? (flatten (get-term-strs %)))])))
 
 (defn parse-term [term-str]
   (let [[_ sign coef _ X _ deg] (re-matches #"^([-+])?(\d+(\.\d+)?)?(\*?X(\^(\d+))?)?$" term-str)]
