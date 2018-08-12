@@ -1,9 +1,7 @@
 (ns cmptr.math)
 
 (defn mx [& args]                                          ;; there is native implementation, but the task prohibits
-  (when-not                                                 ;; use of it
-    (empty? args)
-    (reduce #(if (> %1 %2) %1 %2) args)))
+  (reduce #(if (> %1 %2) %1 %2) 0 args))
 
 (defn square [x]
   (* x x))

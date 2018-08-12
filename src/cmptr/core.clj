@@ -5,7 +5,7 @@
             [cmptr.solving :refer [solve-eq]]))
 
 (defn remove-trailing-zeroes [num-str]
-  (str/replace num-str #"\.0$" ""))
+  (str/replace num-str #"\.0+$" ""))
 
 (defn print-solutions [phrase solutions]
   (println phrase)
@@ -45,4 +45,4 @@
 ;(-main "-8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0")
 ;(-main "8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = -3 * X^0 + 8 * X^3")
 ;(-main "5 + 4 * X + X^2= X^2")
-;(-main "--5 + 4.665 * X + X^2 += X^2")
+(-main "--5 + 4.665 * X + X^2 += X^2")
