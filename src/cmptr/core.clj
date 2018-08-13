@@ -9,7 +9,7 @@
 
 (defn print-solutions [phrase solutions]
   (println phrase)
-  (doseq [solution solutions]
+  (doseq [solution (distinct solutions)]
     (println (remove-trailing-zeroes (str solution)))))
 
 (defn -main [eq-str]
@@ -37,7 +37,6 @@
                     (print-solutions "Discriminant is zero, the solution is:" solutions)
                     (pos? discriminant)
                     (print-solutions "Discriminant is strictly positive, the two solutions are:"
-
                                      solutions))))))))
 
 ;(-main "X = X")
