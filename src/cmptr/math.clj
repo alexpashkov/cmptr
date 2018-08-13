@@ -20,4 +20,4 @@
                        (if (zero? (- guess improved-guess))
                          guess
                          (recur improved-guess x))))]
-    (if (zero? x) 0 (double (sqrt-iter 1 x)))))
+    (if (zero? x) 0.0 (sqrt-iter 1.0 x))))
