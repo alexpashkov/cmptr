@@ -2,15 +2,8 @@
   (:require [clojure.string :as str]
             [cmptr.parsing :as parsing]
             [cmptr.term :as term]
-            [cmptr.solving :refer [solve-eq]]))
-
-(defn remove-trailing-zeroes [num-str]
-  (str/replace num-str #"\.0+$" ""))
-
-(defn print-solutions [phrase solutions]
-  (println phrase)
-  (doseq [solution (distinct solutions)]
-    (println (remove-trailing-zeroes (str solution)))))
+            [cmptr.solving :refer [solve-eq]]
+            [cmptr.printing :refer [print-solutions]]))
 
 (defn -main [eq-str]
   (let [reduced-terms (try
@@ -39,14 +32,18 @@
                     (print-solutions "Discriminant is strictly positive, the two solutions are:"
                                      solutions))))))))
 
-;(-main "X = X")
-;(-main "X=1")
-;(-main  "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
-;(-main "5 * X^0 + 4 * X^1 = 4 * X^0")
-;(-main "-8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0")
-;(-main "8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = -3 * X^0 + 8 * X^3")
-;(-main "5 + 4 * X + X^2= X^2")
-;(-main "--5 + 4.665 * X + X^2 += X^2")
-;(-main "+")
-;(-main "+++")
-;(-main "+%")
+(-main "X = X")
+(-main "X=1")
+(-main  "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0")
+(-main "5 * X^0 + 4 * X^1 = 4 * X^0")
+(-main "-8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = 3 * X^0")
+(-main "8 * X^0 - 6 * X^1 + 0 * X^2 - 5.6 * X^3 = -3 * X^0 + 8 * X^3")
+(-main "5 + 4 * X + X^2= X^2")
+(-main "--5 + 4.665 * X + X^2 += X^2")
+(-main "2X^2 = 0")
+(-main "X^2 = 1")
+(-main "X^2 = -4")
+(-main "+")
+(-main "+++")
+(-main "+%")
+(-main "15 - 8X - X^2 = 0")
